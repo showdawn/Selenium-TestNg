@@ -21,6 +21,8 @@ import java.util.logging.Logger;
 public class Config {
 
     private static final String LOCAL_CONFIG_FILE_NAME = "app.properties";
+    
+    
 
     private static final String CHROME_DRIVER_PATH = "chromeDriver/chromedriver.exe";
 
