@@ -2,7 +2,7 @@ package com.windstream.model;
 
 import java.util.Date;
 
-public class OrderModel {
+public class OrderModel implements Comparable {
 
     private String orderNumber;
     private String orderStatus;
@@ -57,5 +57,14 @@ public class OrderModel {
         result = 31 * result + (orderStatus != null ? orderStatus.hashCode() : 0);
         result = 31 * result + (orderDate != null ? orderDate.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public int compareTo(Object other) {
+        if (getOrderNumber().equals(((OrderModel) other).getOrderNumber())) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 }

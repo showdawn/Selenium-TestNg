@@ -8,9 +8,17 @@ import java.util.List;
 
 public class ExcelModel {
 
+    private BrowserModel browser;
     private List<LoginModel> loginCredentials;
     private List<OrderModel> orders;
-    private List<BrowserModel> browsersList;
+
+    public BrowserModel getBrowser() {
+        return browser;
+    }
+
+    public void setBrowser(BrowserModel browser) {
+        this.browser = browser;
+    }
 
     public List<LoginModel> getLoginCredentials() {
         return loginCredentials;
@@ -26,13 +34,5 @@ public class ExcelModel {
 
     public void setOrders(List<OrderModel> orders) {
         this.orders = orders;
-    }
-
-    public List<BrowserModel> getBrowsersList() {
-        return browsersList;
-    }
-
-    public void setBrowsersList(List<BrowserModel> browsersList) {
-        this.browsersList = browsersList;
     }
 }

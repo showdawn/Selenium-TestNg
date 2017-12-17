@@ -13,6 +13,7 @@ import com.windstream.util.ExcelModel;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
+import java.util.Collections;
 import java.util.List;
 
 public class OrderStatusTest extends BaseTestCase {
@@ -40,13 +41,29 @@ public class OrderStatusTest extends BaseTestCase {
             menu.navigateToOrders();
 
             OrdersPage ordersPage = new OrdersPage();
-            List<OrderModel> orderDataFromBrowser =  ordersPage.getOrderStatuses(excelModel.getOrders());
+            List<OrderModel> orderDataFromBrowser = ordersPage.getOrderStatuses(excelModel.getOrders());
 
-            for()
+            compareOrderLists(orderDataFromBrowser, excelModel.getOrders());
 
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail();
+        }
+    }
+
+    private void compareOrderLists(List<OrderModel> ordersFromBrowser, List<OrderModel> orderInputData) {
+        if (ordersFromBrowser.size() != orderInputData.size()) {
+            Assert.fail();
+        } else {
+            ordersFromBrowser.sort((a, b) -> b.compareTo(a));
+            orderInputData.sort((a, b) -> b.compareTo(a));
+
+            for (int i = 0; i < ordersFromBrowser.size(); i++) {
+                if (!ordersFromBrowser.get(0).equals(orderInputData.get(0))) {
+                    Assert.fail();
+                    return;
+                }
+            }
         }
     }
 

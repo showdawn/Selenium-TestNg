@@ -18,9 +18,9 @@ import java.util.List;
 
 public class ExcelHelper {
 
-    public static ExcelModel readFromExcelFile(String excelFilePath) throws IOException {
+    public static List<ExcelModel> readFromExcelFile(String excelFilePath) throws IOException {
 
-        ExcelModel excelModel = new ExcelModel();
+        List<ExcelModel> excelModels = new ArrayList<>();
 
         FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
         Workbook workbook = new XSSFWorkbook(inputStream);
@@ -34,13 +34,16 @@ public class ExcelHelper {
         //Orders Sheet - Get All List of Orders to validate from sheet
         List<OrderModel> orders = populateOrderDetails(workbook.getSheetAt(2));
 
-        excelModel.setBrowsersList(browsers);
-        excelModel.setLoginCredentials(logins);
-        excelModel.setOrders(orders);
-
+        for (BrowserModel browser : browsers) {
+            ExcelModel excelModel = new ExcelModel();
+            excelModel.setBrowser(browser);
+            excelModel.setLoginCredentials(logins);
+            excelModel.setOrders(orders);
+            excelModels.add(excelModel);
+        }
         workbook.close();
         inputStream.close();
-        return excelModel;
+        return excelModels;
     }
 
     private static List<BrowserModel> populateBrowserList(Sheet browserSheet) {
