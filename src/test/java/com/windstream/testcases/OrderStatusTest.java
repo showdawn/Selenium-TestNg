@@ -1,13 +1,19 @@
 package com.windstream.testcases;
 
 import com.windstream.config.Config;
+import com.windstream.dataProviders.ExcelDataProvider;
+import com.windstream.model.OrderModel;
 import com.windstream.pageObjects.BasePageObject;
 import com.windstream.pageObjects.LoginPage;
 import com.windstream.pageObjects.MenuPage;
-import com.windstream.pageObjects.orders.OrdersPage;
+import com.windstream.pageObjects.OrdersPage;
 import com.windstream.reports.Report;
+import com.windstream.testcases.base.BaseTestCase;
+import com.windstream.util.ExcelModel;
 import org.testng.Assert;
 import org.testng.annotations.*;
+
+import java.util.List;
 
 public class OrderStatusTest extends BaseTestCase {
 
@@ -23,18 +29,20 @@ public class OrderStatusTest extends BaseTestCase {
         super.beforeMethod();
     }
 
-    @Test
-    public void testOrderStatus() {
+    @Test(dataProvider = "orderStatusDataProvider", dataProviderClass = ExcelDataProvider.class)
+    public void testOrderStatus(ExcelModel excelModel) {
         try {
 
             LoginPage loginPage = new LoginPage();
-            loginPage.login("sachidananda.uat", "Sachi123!");
+            loginPage.login(excelModel.getLoginCredentials().get(0).getUsername(), excelModel.getLoginCredentials().get(0).getPassword());
 
             MenuPage menu = new MenuPage();
             menu.navigateToOrders();
 
             OrdersPage ordersPage = new OrdersPage();
-            ordersPage.extractStatus();
+            List<OrderModel> orderDataFromBrowser =  ordersPage.getOrderStatuses(excelModel.getOrders());
+
+            for()
 
         } catch (Exception e) {
             e.printStackTrace();

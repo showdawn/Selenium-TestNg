@@ -19,8 +19,7 @@ import java.util.logging.Logger;
 public class Config {
 
     private static final String LOCAL_CONFIG_FILE_NAME = "app.properties";
-    
-    
+
 
     private static final String CHROME_DRIVER_PATH = "chromeDriver/chromedriver.exe";
 
@@ -149,5 +148,13 @@ public class Config {
 
     public static String getTestReportLocation() {
         return getProp("excelExportLocation");
+    }
+
+    public static String getExtentReportLocation() {
+        return getProp("extentReportLocation");
+    }
+
+    public static String getInputExcelPath() {
+        return getProp("inputExcelPath");
     }
 }

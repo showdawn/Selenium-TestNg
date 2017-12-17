@@ -1,10 +1,7 @@
 package com.windstream.reports;
 
-import com.windstream.reports.excelReports.ExcelReport;
-import com.windstream.reports.excelReports.ExcelReportImpl;
 import com.windstream.reports.pdf.PDFReport;
 import com.windstream.reports.pdf.PDFReportImpl;
-import com.windstream.reports.pojo.ExcelPojo;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -34,10 +31,5 @@ public class Report {
 
     public byte[] getScreenShotInBytes(WebDriver driver) {
         return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-    }
-
-    public void createExcel(String sheetName, String filename, String fileSavelocation, List<ExcelPojo> excel) {
-        ExcelReport excelReport = new ExcelReportImpl();
-        excelReport.createExcel(sheetName, filename, fileSavelocation, excel);
     }
 }

@@ -1,7 +1,6 @@
 package com.windstream.pageObjects;
 
 import com.windstream.config.Config;
-import com.windstream.reports.pojo.ExcelPojo;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -18,15 +17,11 @@ public class BasePageObject {
 
     private static List<Object> screenshots;
     private static WebDriver driver;
-    private static ExcelPojo excelPojo;
-    private static List<ExcelPojo> excelPojoList;
 
     public static void beforeTest() {
-        excelPojoList = new ArrayList<>();
     }
 
     public static void beforeMethod() {
-        excelPojo = new ExcelPojo();
         driver = Config.getDriver();
         screenshots = new ArrayList<>();
     }
@@ -36,17 +31,12 @@ public class BasePageObject {
         Config.quitDriver();
         driver = null;
         screenshots = null;
-        if(excelPojoList!=null){
-            excelPojoList.add(excelPojo);
-            excelPojo = null;
-        }
     }
 
     public static void afterTest() {
-        excelPojoList = null;
     }
 
-    protected static WebDriver getDriver() {
+    static WebDriver getDriver() {
         return driver;
     }
 
@@ -54,23 +44,11 @@ public class BasePageObject {
         return screenshots;
     }
 
-    static ExcelPojo getExcelPojo() {
-        return excelPojo;
-    }
-
-    public static List<ExcelPojo> getExcelPojoList() {
-        return excelPojoList;
-    }
-
-    public static void setExcelPojoList(List<ExcelPojo> excelPojoList) {
-        BasePageObject.excelPojoList = excelPojoList;
-    }
-
     protected ExpectedCondition getPageLoadCondition() {
         return null;
     }
 
-    protected void waitForPageToLoad(ExpectedCondition pageLoadCondition) {
+    void waitForPageToLoad(ExpectedCondition pageLoadCondition) {
         waitForPageToLoad(10L, pageLoadCondition);
     }
 
@@ -94,5 +72,6 @@ public class BasePageObject {
 
     void captureScreenForPDF() {
         screenshots.add(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES));
+
     }
 }

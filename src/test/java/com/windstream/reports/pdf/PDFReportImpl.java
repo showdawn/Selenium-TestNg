@@ -29,6 +29,7 @@ public class PDFReportImpl implements PDFReport {
                         - document.rightMargin()) / image.getWidth()) * 100;
                 image.scalePercent(scale);
                 document.add(image);
+                document.newPage();
             }
             document.close();
         } catch (DocumentException | IOException e) {
