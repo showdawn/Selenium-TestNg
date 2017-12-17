@@ -36,15 +36,17 @@ public class BasePageObject {
         Config.quitDriver();
         driver = null;
         screenshots = null;
-        excelPojoList.add(excelPojo);
-        excelPojo = null;
+        if(excelPojoList!=null){
+            excelPojoList.add(excelPojo);
+            excelPojo = null;
+        }
     }
 
     public static void afterTest() {
         excelPojoList = null;
     }
 
-    static WebDriver getDriver() {
+    protected static WebDriver getDriver() {
         return driver;
     }
 
@@ -68,7 +70,7 @@ public class BasePageObject {
         return null;
     }
 
-    void waitForPageToLoad(ExpectedCondition pageLoadCondition) {
+    protected void waitForPageToLoad(ExpectedCondition pageLoadCondition) {
         waitForPageToLoad(10L, pageLoadCondition);
     }
 

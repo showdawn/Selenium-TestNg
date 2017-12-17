@@ -1,12 +1,10 @@
 package com.windstream.config;
 
 
-import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -25,6 +23,8 @@ public class Config {
     private static final String CHROME_DRIVER_PATH = "chromeDriver/chromedriver.exe";
 
     private static final String FIREFOX_DRIVER_PATH = "firefoxDriver/geckodriver.exe";
+
+    private static final String EDGE_DRIVER_PATH = "edgeDriver/MicrosoftWebDriver.exe";
 
     private static final String IE_DRIVER_PATH = "ieDriver/IEDriverServer.exe";
 
@@ -83,6 +83,16 @@ public class Config {
         return driver;
     }
 
+    private static WebDriver getEdgeDriver() {
+        File edgeDriver = new File(ClassLoader.getSystemResource(EDGE_DRIVER_PATH).getPath());
+        System.setProperty("webdriver.edge.driver", edgeDriver.getPath());
+        DesiredCapabilities capabilities = DesiredCapabilities.edge();
+        if (driver == null || !(driver instanceof EdgeDriver)) {
+            driver = new EdgeDriver(capabilities);
+        }
+        return driver;
+    }
+
 
     public static WebDriver getDriver() {
         String browser = getBrowser();
@@ -92,6 +102,8 @@ public class Config {
             return getFirefoxDriver();
         } else if ("ie".equals(browser)) {
             return getIEDriver();
+        } else if ("edge".equals(browser)) {
+            return getEdgeDriver();
         } else {
             return null;
         }
@@ -113,24 +125,7 @@ public class Config {
     }
 
 
-    /**
-     * @return null if window is supposed to be maximised, Dimension if any other size is demanded
-     */
-    public static Dimension getBrowserSize() {
-        String size = getProp("browserSize");
-        if (StringUtils.isNotBlank(size) || "maximised".equals(size) || size.split("x").length == 2) {
-            if ("maximised".equals(size)) {
-                return null;
-            } else {
-                return new Dimension(Integer.valueOf(size.split("x")[0]), Integer.valueOf(size.split("x")[1]));
-            }
-        } else {
-            throw new WebDriverException("browser size: " + size + " is not a proper value");
-        }
-    }
-
-
-    public static String getBrowser() {
+    private static String getBrowser() {
         return getProp("browser");
     }
 
@@ -146,11 +141,11 @@ public class Config {
 
 
     public static String getScreenShotLocation() {
-        return getProp("failedScreenShotLocation");
+        return getProp("screenShotsLocation");
     }
 
 
     public static String getTestReportLocation() {
-        return getProp("excelReportLocation");
+        return getProp("excelExportLocation");
     }
 }
