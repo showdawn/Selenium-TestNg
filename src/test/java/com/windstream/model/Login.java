@@ -1,6 +1,6 @@
 package com.windstream.model;
 
-public class LoginModel {
+public class Login {
 
     private String username;
     private String password;
@@ -23,7 +23,7 @@ public class LoginModel {
 
     @Override
     public String toString() {
-        return "LoginModel{" +
+        return "Login{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
@@ -34,7 +34,7 @@ public class LoginModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        LoginModel that = (LoginModel) o;
+        Login that = (Login) o;
 
         return username.equals(that.username) && password.equals(that.password);
     }

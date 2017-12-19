@@ -1,12 +1,18 @@
 package com.windstream.model;
 
-import java.util.Date;
-
-public class OrderModel implements Comparable {
+public class Orders implements Comparable {
 
     private String orderNumber;
     private String orderStatus;
-    private String orderDate;
+    private String failedScreenshotPath;
+
+    public Orders() {
+    }
+
+    public Orders(String orderNumber, String orderStatus) {
+        this.orderNumber = orderNumber;
+        this.orderStatus = orderStatus;
+    }
 
     public String getOrderNumber() {
         return orderNumber;
@@ -24,20 +30,19 @@ public class OrderModel implements Comparable {
         this.orderStatus = orderStatus;
     }
 
-    public String getOrderDate() {
-        return orderDate;
+    public String getFailedScreenshotPath() {
+        return failedScreenshotPath;
     }
 
-    public void setOrderDate(String orderDate) {
-        this.orderDate = orderDate;
+    public void setFailedScreenshotPath(String failedScreenshotPath) {
+        this.failedScreenshotPath = failedScreenshotPath;
     }
 
     @Override
     public String toString() {
-        return "OrderModel{" +
+        return "Orders{" +
                 "orderNumber='" + orderNumber + '\'' +
                 ", orderStatus='" + orderStatus + '\'' +
-                ", orderDate='" + orderDate + '\'' +
                 '}';
     }
 
@@ -45,9 +50,7 @@ public class OrderModel implements Comparable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
-        OrderModel that = (OrderModel) o;
-
+        Orders that = (Orders) o;
         return (orderNumber != null ? orderNumber.equals(that.orderNumber) : that.orderNumber == null) && (orderStatus != null ? orderStatus.equals(that.orderStatus) : that.orderStatus == null);
     }
 
@@ -55,13 +58,12 @@ public class OrderModel implements Comparable {
     public int hashCode() {
         int result = orderNumber != null ? orderNumber.hashCode() : 0;
         result = 31 * result + (orderStatus != null ? orderStatus.hashCode() : 0);
-        result = 31 * result + (orderDate != null ? orderDate.hashCode() : 0);
         return result;
     }
 
     @Override
     public int compareTo(Object other) {
-        if (getOrderNumber().equals(((OrderModel) other).getOrderNumber())) {
+        if (getOrderNumber().equals(((Orders) other).getOrderNumber())) {
             return 0;
         } else {
             return 1;

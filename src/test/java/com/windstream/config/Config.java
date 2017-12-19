@@ -49,16 +49,17 @@ public class Config {
 
 
     private static WebDriver getChromeDriver() {
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("start-maximized");
-        chromeOptions.addArguments("disable-notifications");
-        chromeOptions.addArguments("process-per-site");
-        chromeOptions.addArguments("dns-prefetch-disable");
-        DesiredCapabilities caps = new DesiredCapabilities();
-        caps.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
-        File chromeDriver = new File(ClassLoader.getSystemResource(CHROME_DRIVER_PATH).getPath());
-        System.setProperty("webdriver.chrome.driver", chromeDriver.getPath());
         if (driver == null || !(driver instanceof ChromeDriver)) {
+            driver = null;
+            ChromeOptions chromeOptions = new ChromeOptions();
+            chromeOptions.addArguments("start-maximized");
+            chromeOptions.addArguments("disable-notifications");
+            chromeOptions.addArguments("process-per-site");
+            chromeOptions.addArguments("dns-prefetch-disable");
+            DesiredCapabilities caps = new DesiredCapabilities();
+            caps.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
+            File chromeDriver = new File(ClassLoader.getSystemResource(CHROME_DRIVER_PATH).getPath());
+            System.setProperty("webdriver.chrome.driver", chromeDriver.getPath());
             driver = new ChromeDriver(caps);
         }
         return driver;
@@ -66,9 +67,10 @@ public class Config {
 
 
     private static WebDriver getFirefoxDriver() {
-        File firefoxDriver = new File(ClassLoader.getSystemResource(FIREFOX_DRIVER_PATH).getPath());
-        System.setProperty("webdriver.gecko.driver", firefoxDriver.getPath());
         if (driver == null || !(driver instanceof FirefoxDriver)) {
+            driver = null;
+            File firefoxDriver = new File(ClassLoader.getSystemResource(FIREFOX_DRIVER_PATH).getPath());
+            System.setProperty("webdriver.gecko.driver", firefoxDriver.getPath());
             driver = new FirefoxDriver();
         }
         return driver;
@@ -76,19 +78,21 @@ public class Config {
 
 
     private static WebDriver getIEDriver() {
-        File ieDriver = new File(ClassLoader.getSystemResource(IE_DRIVER_PATH).getPath());
-        System.setProperty("webdriver.ie.driver", ieDriver.getPath());
         if (driver == null || !(driver instanceof InternetExplorerDriver)) {
+            driver = null;
+            File ieDriver = new File(ClassLoader.getSystemResource(IE_DRIVER_PATH).getPath());
+            System.setProperty("webdriver.ie.driver", ieDriver.getPath());
             driver = new InternetExplorerDriver();
         }
         return driver;
     }
 
     private static WebDriver getEdgeDriver() {
-        File edgeDriver = new File(ClassLoader.getSystemResource(EDGE_DRIVER_PATH).getPath());
-        System.setProperty("webdriver.edge.driver", edgeDriver.getPath());
-        DesiredCapabilities capabilities = DesiredCapabilities.edge();
         if (driver == null || !(driver instanceof EdgeDriver)) {
+            driver = null;
+            File edgeDriver = new File(ClassLoader.getSystemResource(EDGE_DRIVER_PATH).getPath());
+            System.setProperty("webdriver.edge.driver", edgeDriver.getPath());
+            DesiredCapabilities capabilities = DesiredCapabilities.edge();
             driver = new EdgeDriver(capabilities);
         }
         return driver;
@@ -112,21 +116,29 @@ public class Config {
 
 
     public static void closeDriver() {
-        driver.close();
+        if(driver != null){
+            try {
+                driver.close();
+            } catch (Exception e) {
+                //Swallow Exception
+            }
+        }
     }
 
 
     public static void quitDriver() {
         try {
-            driver.quit();
-            driver = null;
+            if(driver != null){
+                driver.quit();
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            //Swallow Exception
+        }finally {
+            driver = null;
         }
     }
 
-
-    private static String getBrowser() {
+    public static String getBrowser() {
         return getProp("browser");
     }
 

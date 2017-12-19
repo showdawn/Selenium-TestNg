@@ -19,6 +19,9 @@
 # IntelliJ
 /out/
 
+#Build Output
+/target
+
 ### Java ###
 # Compiled class file
 *.class

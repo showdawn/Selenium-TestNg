@@ -1,7 +1,6 @@
 package com.windstream.pageObjects;
 
-import com.windstream.model.OrderModel;
-import com.windstream.pageObjects.BasePageObject;
+import com.windstream.model.Orders;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -10,21 +9,11 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class OrdersPage extends BasePageObject {
 
-    @Override
-    public ExpectedCondition getPageLoadCondition() {
-        return ExpectedConditions.presenceOfElementLocated(By.className("rgMasterTable"));
-    }
-
-    public OrdersPage() {
-        PageFactory.initElements(getDriver(), this);
-    }
-
-    @FindBy(name = "ctl00_AccountContent_cmbOrders_Arrow")
+    @FindBy(name = "ctl00$AccountContent$cmbOrders")
     private WebElement orderTopFilterButton;
 
     @FindBy(name = "ctl00$AccountContent$RadgridOrderStatus$ctl00$ctl02$ctl02$Filter_OrderID")
@@ -36,58 +25,81 @@ public class OrdersPage extends BasePageObject {
     @FindBy(name = "ctl00$AccountContent$RadgridOrderStatus$ctl00$ctl02$ctl02$FilterTextBox_OrderID")
     private WebElement orderNumberFilterText;
 
+    @FindBy(xpath = "//*[@id=\"ctl00_AccountContent_RadgridOrderStatus_ctl00\"]")
+    private WebElement orderRowsTableHeader;
+
     @FindBy(xpath = "//*[@id=\"ctl00_AccountContent_RadgridOrderStatus_ctl00\"]/tbody/tr")
     private List<WebElement> orderRowsTable;
-
 
     @FindBy(css = "status")
     private List<WebElement> orderStatus;
 
+    public OrdersPage() {
+        PageFactory.initElements(getDriver(), this);
+    }
+
+    @Override
+    public ExpectedCondition getPageLoadCondition() {
+        return ExpectedConditions.presenceOfElementLocated(By.className("rgMasterTable"));
+    }
+
     private ExpectedCondition getPageLoadConditionForOrderNumberFilter() {
-        return ExpectedConditions.elementToBeClickable(orderNumberFilterButton);
+        return ExpectedConditions.elementToBeClickable(orderNumberFilterText);
     }
 
-    public void filterByOrderNumber(String orderNumber) {
-        waitForPageToLoad(getPageLoadConditionForOrderNumberFilter());
-        orderNumberFilterText.clear();
-        orderNumberFilterText.sendKeys(orderNumber);
-        orderNumberFilterText.sendKeys(Keys.ENTER);
+    private ExpectedCondition getPageLoadConditionForOrderDetails() {
+        return ExpectedConditions.elementToBeClickable(orderRowsTableHeader);
     }
 
-    public void setTopOrderFilterToAllOrders() {
+    private void setTopOrderFilterToAllOrders() {
         //Change selection of Orders to All
         orderTopFilterButton.click();
+        //Capture Screen
+        captureScreenForPDF();
         //Choose All Orders from Dropdown
+        delay(1000);
         allOrdersOption.click();
+        captureScreenForPDF();
     }
 
-    public OrderModel readOrderDetailsFromGrid() {
-        OrderModel orderModel = new OrderModel();
+    private void filterByOrderNumber(String orderNumber) {
+        waitForPageToLoad(getPageLoadConditionForOrderNumberFilter());
+        orderNumberFilterText.clear();
+        delay(1000);
+        orderNumberFilterText.sendKeys(orderNumber);
+        delay(1000);
+        orderNumberFilterText.sendKeys(Keys.ENTER);
+        delay(1000);
+        waitForPageToLoad(getPageLoadConditionForOrderDetails());
+    }
+
+    private Orders readOrderDetailsFromGrid() {
+        Orders orders = new Orders();
         try {
-            orderModel.setOrderNumber(getDriver().findElement(By.xpath("//*[@id=\"ctl00_AccountContent_RadgridOrderStatus_ctl00\"]/tbody/tr[1]" + "/td[2]")).getText());
-            orderModel.setOrderStatus(getDriver().findElement(By.xpath("//*[@id=\"ctl00_AccountContent_RadgridOrderStatus_ctl00\"]/tbody/tr[1]" + "/td[3]")).getText());
-            orderModel.setOrderDate(getDriver().findElement(By.xpath("//*[@id=\"ctl00_AccountContent_RadgridOrderStatus_ctl00\"]/tbody/tr[1]" + "/td[4]")).getText());
+            delay(1000);
+            orders.setFailedScreenshotPath(captureScreenForPDF());
+            orders.setOrderNumber(getDriver().findElement(By.xpath("//*[@id=\"ctl00_AccountContent_RadgridOrderStatus_ctl00\"]/tbody/tr[1]" + "/td[2]")).getText());
+            orders.setOrderStatus(getDriver().findElement(By.xpath("//*[@id=\"ctl00_AccountContent_RadgridOrderStatus_ctl00\"]/tbody/tr[1]" + "/td[3]")).getText());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(orderModel);
-        return orderModel;
+        return orders;
+    }
+
+    public Orders getOrderDetailsFromPage(String orderNumber) {
+        //Choose all orders
+        setTopOrderFilterToAllOrders();
+        //Filter by Order Number
+        filterByOrderNumber(orderNumber);
+        return readOrderDetailsFromGrid();
     }
 
 
-    public List<OrderModel> getOrderStatuses(List<OrderModel> orders) {
-        List<OrderModel> ordersList = new ArrayList<>();
-        //Choose all orders
-        setTopOrderFilterToAllOrders();
-        //Try to find status of All order numbers listed
-        for (int i = 1; i <= orders.size(); i++) {
-
-            //Filter by Order Number
-            filterByOrderNumber(orders.get(i).getOrderNumber());
-
-            //Read Order details displayed
-            ordersList.add(readOrderDetailsFromGrid());
+    private void delay(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        return ordersList;
     }
 }

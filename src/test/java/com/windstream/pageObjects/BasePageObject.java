@@ -1,6 +1,7 @@
 package com.windstream.pageObjects;
 
 import com.windstream.config.Config;
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -9,6 +10,8 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -29,15 +32,16 @@ public class BasePageObject {
     public static void afterMethod() {
         Config.closeDriver();
         Config.quitDriver();
-        driver = null;
         screenshots = null;
+
     }
 
     public static void afterTest() {
     }
 
+
     static WebDriver getDriver() {
-        return driver;
+        return Config.getDriver();
     }
 
     public static List<Object> getScreenshots() {
@@ -70,8 +74,15 @@ public class BasePageObject {
         }
     }
 
-    void captureScreenForPDF() {
+    public String captureScreenForPDF() {
         screenshots.add(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES));
-
+        File file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        String destination = Config.getScreenShotLocation() + "\\failed.png";
+        try {
+            FileUtils.copyFile(file, new File(destination));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return destination;
     }
 }
