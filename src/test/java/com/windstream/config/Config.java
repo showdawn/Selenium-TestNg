@@ -59,7 +59,8 @@ public class Config {
             DesiredCapabilities caps = new DesiredCapabilities();
             caps.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
             File chromeDriver = new File(ClassLoader.getSystemResource(CHROME_DRIVER_PATH).getPath());
-            System.setProperty("webdriver.chrome.driver", chromeDriver.getPath());
+            //System.setProperty("webdriver.chrome.driver", chromeDriver.getPath());
+            System.setProperty("webdriver.chrome.driver", "C:\\Sachi\\Broadview\\Prop\\Test_Framework\\src\\test\\resources\\chromeDriver\\chromedriver.exe");
             driver = new ChromeDriver(caps);
         }
         return driver;
@@ -70,7 +71,8 @@ public class Config {
         if (driver == null || !(driver instanceof FirefoxDriver)) {
             driver = null;
             File firefoxDriver = new File(ClassLoader.getSystemResource(FIREFOX_DRIVER_PATH).getPath());
-            System.setProperty("webdriver.gecko.driver", firefoxDriver.getPath());
+            //System.setProperty("webdriver.gecko.driver", firefoxDriver.getPath());
+            System.setProperty("webdriver.chrome.driver", "C:\\Sachi\\Broadview\\Prop\\Test_Framework\\src\\test\\resources\\firefoxDriver\\geckodriver.exe");
             driver = new FirefoxDriver();
         }
         return driver;
@@ -81,7 +83,8 @@ public class Config {
         if (driver == null || !(driver instanceof InternetExplorerDriver)) {
             driver = null;
             File ieDriver = new File(ClassLoader.getSystemResource(IE_DRIVER_PATH).getPath());
-            System.setProperty("webdriver.ie.driver", ieDriver.getPath());
+            //System.setProperty("webdriver.ie.driver", ieDriver.getPath());
+            System.setProperty("webdriver.ie.driver", "C:\\Sachi\\Broadview\\Prop\\Test_Framework\\src\\test\\resources\\ieDriver\\IEDriverServer.exe");
             driver = new InternetExplorerDriver();
         }
         return driver;
@@ -91,7 +94,8 @@ public class Config {
         if (driver == null || !(driver instanceof EdgeDriver)) {
             driver = null;
             File edgeDriver = new File(ClassLoader.getSystemResource(EDGE_DRIVER_PATH).getPath());
-            System.setProperty("webdriver.edge.driver", edgeDriver.getPath());
+            //System.setProperty("webdriver.edge.driver", edgeDriver.getPath());
+            System.setProperty("webdriver.edge.driver", "C:\\Sachi\\Broadview\\Prop\\Test_Framework\\src\\test\\resources\\edgeDriver\\MicrosoftWebDriver.exe");
             DesiredCapabilities capabilities = DesiredCapabilities.edge();
             driver = new EdgeDriver(capabilities);
         }
