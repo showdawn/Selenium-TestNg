@@ -1,1 +1,1 @@
-Test Project 1
+A Selenium & TestNG Project for Functional Testing.
