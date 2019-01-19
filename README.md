@@ -1,5 +1,5 @@
 A Selenium & TestNG Project for Functional Testing.
-Features:
+Features of this project:
 - Uses Selenium Webdriver for Cross browser Testing
 - TestNG Data Providers to read data from Excel using Apache POI
 - Uses Page Object Model - POM
